@@ -74,10 +74,8 @@ func (c *Client) Connect(ctx context.Context) error {
 
 	for {
 		select {
-		case _, more := <-ctx.Done():
-			if more {
-				return ctx.Err()
-			}
+		case <-ctx.Done():
+			return ctx.Err()
 		case err := <-completer:
 			return err
 		}
