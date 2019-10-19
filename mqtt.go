@@ -81,3 +81,8 @@ func (c *Client) Connect(ctx context.Context) error {
 		}
 	}
 }
+
+// Disconnect will immediately close the conenction with the mqtt servers
+func (c *Client) DisconnectImmediately() {
+	c.client.Disconnect(0)
+}

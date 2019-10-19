@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test:
-    name: Test & Coverage
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.13
@@ -16,7 +16,21 @@ jobs:
       - name: Get dependencies
         run: go mod download
       - name: Run tests & coverage
-        run: go test -race -coverprofile=coverage.txt -covermode=atomic
+        run: go test -race
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Get dependencies
+        run: go mod download
+      - name: Run tests & coverage
+        run: go test -coverprofile=coverage.txt -covermode=atomic
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.3
         with:

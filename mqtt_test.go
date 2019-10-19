@@ -189,3 +189,24 @@ func TestConnectFailed(t *testing.T) {
 		t.Fatal("connect should have failed")
 	}
 }
+
+// check that a client gets created and a client id is not changed when it is set
+func TestDisconnectImmediately(t *testing.T) {
+	client, err := mqtt.NewClient(mqtt.ClientOptions{
+		Servers: []string{
+			"tcp://test.mosquitto.org:1883",
+		},
+		AutoReconnect: false,
+	})
+	if err != nil {
+		t.Fatal("err should be nil")
+	}
+	if client == nil {
+		t.Fatal("client should not be nil")
+	}
+	err = client.Connect(context.Background())
+	if err != nil {
+		t.Fatal("connect should not have failed")
+	}
+	client.DisconnectImmediately()
+}
