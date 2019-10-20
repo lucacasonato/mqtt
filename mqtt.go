@@ -12,6 +12,7 @@ import (
 type Client struct {
 	Options ClientOptions // The options that were used to create this client
 	client  paho.Client
+	router  *router
 }
 
 // ClientOptions is the list of options used to create a client
@@ -36,6 +37,14 @@ const (
 var (
 	ErrMinimumOneServer = errors.New("mqtt: at least one server needs to be specified")
 )
+
+func handle(callback MessageHandler) paho.MessageHandler {
+	return func(client paho.Client, message paho.Message) {
+		if callback != nil {
+			callback(Message{message: message})
+		}
+	}
+}
 
 // NewClient creates a new client with the specified options
 func NewClient(options ClientOptions) (*Client, error) {
@@ -66,7 +75,15 @@ func NewClient(options ClientOptions) (*Client, error) {
 	pahoOptions.SetAutoReconnect(options.AutoReconnect)
 
 	pahoClient := paho.NewClient(pahoOptions)
-	return &Client{client: pahoClient, Options: options}, nil
+	router := newRouter()
+	pahoClient.AddRoute("#", handle(func(message Message) {
+		routes := router.match(&message)
+		for _, route := range routes {
+			route.handler(message)
+		}
+	}))
+
+	return &Client{client: pahoClient, Options: options, router: router}, nil
 }
 
 // Connect tries to establish a conenction with the mqtt servers

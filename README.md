@@ -81,3 +81,39 @@ if err != nil {
     panic(err)
 }
 ```
+
+### subscribing
+
+```go
+err := client.Subscribe(context.WithTimeout(1 * time.Second), func(message mqtt.Message) {
+    fmt.Printf("recieved a message with content %v\n", message.PayloadString())
+}, "api/v0/main/client1", mqtt.AtLeastOnce)
+if err != nil {
+    panic(err)
+}
+```
+
+### subscribing without listening
+
+```go
+err := client.Subscribe(context.WithTimeout(1 * time.Second), nil, "api/v0/main/client1", mqtt.AtLeastOnce)
+if err != nil {
+    panic(err)
+}
+```
+
+### listening without subscribing
+
+```go
+err := client.Listen(func(message mqtt.Message) {
+    v := interface{}{}
+    err := message.PayloadJSON(&v)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Printf("recieved a message with content %v\n", v)
+}, "api/v0/main/client1")
+if err != nil {
+    panic(err)
+}
+```
