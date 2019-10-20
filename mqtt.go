@@ -24,6 +24,15 @@ type ClientOptions struct {
 	AutoReconnect bool // If the client should automatically try to reconnect when the connection is lost
 }
 
+// QOS describes the quality of service of an mqtt publish
+type QOS byte
+
+const (
+	AtMostOnce  QOS = iota // Deliver at most once to every subscriber - this means message delivery is not guaranteed
+	AtLeastOnce            // Deliver a message at least once to every subscriber
+	ExactlyOnce            // Deliver a message exactly once to every subscriber
+)
+
 var (
 	ErrMinimumOneServer = errors.New("mqtt: at least one server needs to be specified")
 )
@@ -64,6 +73,15 @@ func NewClient(options ClientOptions) (*Client, error) {
 func (c *Client) Connect(ctx context.Context) error {
 	// try to connect to the client
 	token := c.client.Connect()
+	return tokenWithContext(ctx, token)
+}
+
+// Disconnect will immediately close the conenction with the mqtt servers
+func (c *Client) DisconnectImmediately() {
+	c.client.Disconnect(0)
+}
+
+func tokenWithContext(ctx context.Context, token paho.Token) error {
 	completer := make(chan error)
 
 	// TODO: This go routine will not be removed up if the ctx is cancelled or a the ctx timeout passes
@@ -80,9 +98,4 @@ func (c *Client) Connect(ctx context.Context) error {
 			return err
 		}
 	}
-}
-
-// Disconnect will immediately close the conenction with the mqtt servers
-func (c *Client) DisconnectImmediately() {
-	c.client.Disconnect(0)
 }

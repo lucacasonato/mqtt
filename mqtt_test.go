@@ -9,7 +9,7 @@ import (
 	"github.com/lucacasonato/mqtt"
 )
 
-// create client with a nil server array
+// TestNewClientNilServer checks if creating a client with a nil server array works
 func TestNewClientNilServer(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{})
 	if !errors.Is(err, mqtt.ErrMinimumOneServer) {
@@ -20,7 +20,7 @@ func TestNewClientNilServer(t *testing.T) {
 	}
 }
 
-// create client with a server array with no servers
+// TestNewClientNoServer checks if creating a client with a server array with no servers works
 func TestNewClientNoServer(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{},
@@ -33,7 +33,7 @@ func TestNewClientNoServer(t *testing.T) {
 	}
 }
 
-// create client with a server array with no servers
+// TestNewClientBasicServer checks if creating a client with a server array with one server works
 func TestNewClientBasicServer(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
@@ -48,7 +48,7 @@ func TestNewClientBasicServer(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is generated when it is not set
+// TestNewClientNoClientID checks that a client gets created and a client id is generated when it is not set
 func TestNewClientNoClientID(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
@@ -66,7 +66,7 @@ func TestNewClientNoClientID(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is not changed when it is set
+// TestNewClientHasClientID checks that a client gets created and a client id is not changed when it is already set
 func TestNewClientHasClientID(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
@@ -85,7 +85,7 @@ func TestNewClientHasClientID(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is not changed when it is set
+// TestNewClientWithAuthentication has username and password to check if those get set
 func TestNewClientWithAuthentication(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
@@ -102,13 +102,12 @@ func TestNewClientWithAuthentication(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is not changed when it is set
+// TestConnectSuccess just checks that connecting to a broker works
 func TestConnectSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
 			"tcp://test.mosquitto.org:1883",
 		},
-		AutoReconnect: false,
 	})
 	if err != nil {
 		t.Fatal("err should be nil")
@@ -122,13 +121,12 @@ func TestConnectSuccess(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is not changed when it is set
+// TestConnectContextTimeout checks if connect errors if a context with a timeout times out
 func TestConnectContextTimeout(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
 			"tcp://test.mosquitto.org:1883",
 		},
-		AutoReconnect: false,
 	})
 	if err != nil {
 		t.Fatal("err should be nil")
@@ -144,13 +142,12 @@ func TestConnectContextTimeout(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is not changed when it is set
+// TestConnectContextCancel checks if connect errors if a context with a cancel gets canceled
 func TestConnectContextCancel(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
 			"tcp://test.mosquitto.org:1883",
 		},
-		AutoReconnect: false,
 	})
 	if err != nil {
 		t.Fatal("err should be nil")
@@ -170,13 +167,12 @@ func TestConnectContextCancel(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is not changed when it is set
+// TestConnectFailed that a invalid client does not connect and errors
 func TestConnectFailed(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
 			"tcp://test.mosquitto.org:1884", // incorrect port
 		},
-		AutoReconnect: false,
 	})
 	if err != nil {
 		t.Fatal("err should be nil")
@@ -190,13 +186,12 @@ func TestConnectFailed(t *testing.T) {
 	}
 }
 
-// check that a client gets created and a client id is not changed when it is set
+// TestDisconnectImmediately immediately disconnects the mqtt broker
 func TestDisconnectImmediately(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
 			"tcp://test.mosquitto.org:1883",
 		},
-		AutoReconnect: false,
 	})
 	if err != nil {
 		t.Fatal("err should be nil")
