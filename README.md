@@ -52,3 +52,32 @@ if err != nil {
 ```go
 client.Disconnect()
 ```
+
+### publishing a message
+
+#### bytes
+
+```go
+err := client.Publish(context.WithTimeout(1 * time.Second), "api/v0/main/client1", []byte(0, 1 ,2, 3), mqtt.AtLeastOnce)
+if err != nil {
+    panic(err)
+}
+```
+
+#### string
+
+```go
+err := client.PublishString(context.WithTimeout(1 * time.Second), "api/v0/main/client1", "hello world", mqtt.AtLeastOnce)
+if err != nil {
+    panic(err)
+}
+```
+
+#### json
+
+```go
+err := client.Publish(context.WithTimeout(1 * time.Second), "api/v0/main/client1", []string("hello", "world"), mqtt.AtLeastOnce)
+if err != nil {
+    panic(err)
+}
+```
