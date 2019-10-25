@@ -79,7 +79,9 @@ func NewClient(options ClientOptions) (*Client, error) {
 	pahoClient.AddRoute("#", handle(func(message Message) {
 		routes := router.match(&message)
 		for _, route := range routes {
-			route.handler(message)
+			m := message
+			m.vars = route.vars(&message)
+			route.handler(m)
 		}
 	}))
 

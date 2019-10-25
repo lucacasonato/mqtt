@@ -9,9 +9,14 @@ import (
 
 type Message struct {
 	message paho.Message
+	vars    []string
 }
 
 type MessageHandler func(Message)
+
+func (m *Message) TopicVars() []string {
+	return m.vars
+}
 
 func (m *Message) Topic() string {
 	return m.message.Topic()
@@ -41,18 +46,26 @@ func (m *Message) PayloadJSON(v interface{}) error {
 	return json.Unmarshal(m.message.Payload(), v)
 }
 
-func (c *Client) Listen(handler MessageHandler, topics ...string) {
-	for _, topic := range topics {
-		c.router.addRoute(topic, handler)
-	}
+func (c *Client) Handle(topic string, handler MessageHandler) Route {
+	return c.router.addRoute(topic, handler)
 }
 
-func (c *Client) Subscribe(ctx context.Context, handler MessageHandler, topic string, qos QOS) error {
+func (c *Client) Listen(topic string) (chan Message, Route) {
+	queue := make(chan Message)
+	route := c.router.addRoute(topic, func(message Message) {
+		queue <- message
+	})
+	return queue, route
+}
+
+func (c *Client) Subscribe(ctx context.Context, topic string, qos QOS) error {
 	token := c.client.Subscribe(topic, byte(qos), nil)
 	err := tokenWithContext(ctx, token)
-	if err != nil {
-		return err
-	}
-	c.router.addRoute(topic, handler)
-	return nil
+	return err
+}
+
+func (c *Client) Unsubscribe(ctx context.Context, topic string) error {
+	token := c.client.Unsubscribe(topic)
+	err := tokenWithContext(ctx, token)
+	return err
 }

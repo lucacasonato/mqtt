@@ -23,13 +23,13 @@ func TestPublishSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	defer client.DisconnectImmediately()
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
 
-	err = client.Publish(context.Background(), testUUID+"/TestPublishSuccess", []byte("hello"), mqtt.AtLeastOnce)
+	err = client.Publish(ctx(), testUUID+"/TestPublishSuccess", []byte("hello"), mqtt.AtLeastOnce)
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
@@ -46,11 +46,11 @@ func TestPublishContextTimeout(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Nanosecond)
+	ctx, cancel := context.WithTimeout(ctx(), 1*time.Nanosecond)
 	defer cancel()
 	err = client.Publish(ctx, testUUID+"/TestPublishContextTimeout", []byte("hello"), mqtt.AtLeastOnce)
 	if !errors.Is(err, context.DeadlineExceeded) {
@@ -69,11 +69,11 @@ func TestPublishContextCancelled(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(ctx())
 	go func() {
 		time.Sleep(1 * time.Microsecond)
 		cancel()
@@ -96,11 +96,11 @@ func TestPublishFailed(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
-	err = client.Publish(context.Background(), testUUID+"/TestPublishFailed", nil, 3)
+	err = client.Publish(ctx(), testUUID+"/TestPublishFailed", nil, 3)
 	if err == nil {
 		t.Fatalf("publish should have failed")
 	}
@@ -116,13 +116,13 @@ func TestPublishSuccessRetained(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	defer client.DisconnectImmediately()
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
 
-	err = client.Publish(context.Background(), testUUID+"/TestPublishSuccessRetained", []byte("hello"), mqtt.AtLeastOnce, mqtt.Retain)
+	err = client.Publish(ctx(), testUUID+"/TestPublishSuccessRetained", []byte("hello"), mqtt.AtLeastOnce, mqtt.Retain)
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
@@ -138,13 +138,13 @@ func TestPublisStringSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	defer client.DisconnectImmediately()
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
 
-	err = client.PublishString(context.Background(), testUUID+"/TestPublisStringSuccess", "world", mqtt.AtLeastOnce)
+	err = client.PublishString(ctx(), testUUID+"/TestPublisStringSuccess", "world", mqtt.AtLeastOnce)
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
@@ -160,13 +160,13 @@ func TestPublisJSONSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	defer client.DisconnectImmediately()
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
 
-	err = client.PublishJSON(context.Background(), testUUID+"/TestPublisJSONSuccess", []string{"hello", "world"}, mqtt.AtLeastOnce)
+	err = client.PublishJSON(ctx(), testUUID+"/TestPublisJSONSuccess", []string{"hello", "world"}, mqtt.AtLeastOnce)
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
@@ -182,13 +182,13 @@ func TestPublisJSONFailed(t *testing.T) {
 	if err != nil {
 		t.Fatalf("creating client should not have failed: %v", err)
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	defer client.DisconnectImmediately()
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
 
-	err = client.PublishJSON(context.Background(), testUUID+"/TestPublisJSONFailed", make(chan int), mqtt.AtLeastOnce)
+	err = client.PublishJSON(ctx(), testUUID+"/TestPublisJSONFailed", make(chan int), mqtt.AtLeastOnce)
 	if _, ok := err.(*json.UnsupportedTypeError); !ok {
 		t.Fatalf("publish error should be of type *json.UnsupportedTypeError: %v", err)
 	}

@@ -115,7 +115,7 @@ func TestConnectSuccess(t *testing.T) {
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	if err != nil {
 		t.Fatal("connect should not have failed")
 	}
@@ -134,7 +134,7 @@ func TestConnectContextTimeout(t *testing.T) {
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Nanosecond)
+	ctx, cancel := context.WithTimeout(ctx(), 1*time.Nanosecond)
 	defer cancel()
 	err = client.Connect(ctx)
 	if !errors.Is(err, context.DeadlineExceeded) {
@@ -155,7 +155,7 @@ func TestConnectContextCancel(t *testing.T) {
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(ctx())
 	go func() {
 		time.Sleep(1 * time.Microsecond)
 		cancel()
@@ -180,7 +180,7 @@ func TestConnectFailed(t *testing.T) {
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	if err == nil {
 		t.Fatal("connect should have failed")
 	}
@@ -199,7 +199,7 @@ func TestDisconnectImmediately(t *testing.T) {
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
-	err = client.Connect(context.Background())
+	err = client.Connect(ctx())
 	if err != nil {
 		t.Fatal("connect should not have failed")
 	}

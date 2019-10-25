@@ -85,35 +85,35 @@ if err != nil {
 ### subscribing
 
 ```go
-err := client.Subscribe(context.WithTimeout(1 * time.Second), func(message mqtt.Message) {
-    fmt.Printf("recieved a message with content %v\n", message.PayloadString())
-}, "api/v0/main/client1", mqtt.AtLeastOnce)
+err := client.Subscribe(context.WithTimeout(1 * time.Second), "api/v0/main/client1", mqtt.AtLeastOnce)
 if err != nil {
     panic(err)
 }
 ```
 
-### subscribing without listening
+### handling
 
 ```go
-err := client.Subscribe(context.WithTimeout(1 * time.Second), nil, "api/v0/main/client1", mqtt.AtLeastOnce)
-if err != nil {
-    panic(err)
-}
-```
-
-### listening without subscribing
-
-```go
-err := client.Listen(func(message mqtt.Message) {
+route := client.Handle("api/v0/main/client1", func(message mqtt.Message) {
     v := interface{}{}
     err := message.PayloadJSON(&v)
     if err != nil {
         panic(err)
     }
     fmt.Printf("recieved a message with content %v\n", v)
-}, "api/v0/main/client1")
-if err != nil {
-    panic(err)
+})
+// once you are done with the route you can stop handling it
+route.Stop()
+```
+
+### listening
+
+```go
+messages, route := client.Listen("api/v0/main/client1")
+for {
+    message := <-messages
+    fmt.Printf("recieved a message with content %v\n", message.PayloadString())
 }
+// once you are done with the route you can stop handling it
+route.Stop()
 ```
