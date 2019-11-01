@@ -1,10 +1,11 @@
 # mqtt
 
-[![CI](https://github.com/lucacasonato/mqtt/workflows/Tests/badge.svg)](https://github.com/lucacasonato/mqtt/actions?workflow=Tests)
+[![CI](https://github.com/lucacasonato/mqtt/workflows/ci/badge.svg)](https://github.com/lucacasonato/mqtt/actions?workflow=ci)
 [![Code Coverage](https://codecov.io/gh/lucacasonato/mqtt/branch/master/graph/badge.svg?token=QoETPezQp9)](https://codecov.io/gh/lucacasonato/mqtt)
 [![GoDoc](https://godoc.org/github.com/lucacasonato/mqtt?status.svg)](http://godoc.org/github.com/lucacasonato/mqtt)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lucacasonato/mqtt)](https://goreportcard.com/report/github.com/lucacasonato/mqtt)
 
-An mqtt client for Go that improves usability over the paho.mqtt.golang library it wraps. Made for 🤖.
+An mqtt client for Go that improves usability over the [paho.mqtt.golang](https://github.com/eclipse/paho.mqtt.golang) library it wraps. Made for 🧑.
 
 ## installation
 
@@ -46,6 +47,8 @@ if err != nil {
     panic(err)
 }
 ```
+
+You can use any of these schemes for the broker `tcp` (unesecured), `ssl` (secured), `ws` (unsecured), `wss` (secured).
 
 ### disconnecting from a client
 
