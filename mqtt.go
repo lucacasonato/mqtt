@@ -29,12 +29,16 @@ type ClientOptions struct {
 type QOS byte
 
 const (
-	AtMostOnce  QOS = iota // Deliver at most once to every subscriber - this means message delivery is not guaranteed
-	AtLeastOnce            // Deliver a message at least once to every subscriber
-	ExactlyOnce            // Deliver a message exactly once to every subscriber
+	// AtMostOnce means the broker will deliver at most once to every subscriber - this means message delivery is not guaranteed
+	AtMostOnce QOS = iota
+	// AtLeastOnce means the broker will deliver a message at least once to every subscriber
+	AtLeastOnce
+	// ExactlyOnce means the broker will deliver a message exactly once to every subscriber
+	ExactlyOnce
 )
 
 var (
+	// ErrMinimumOneServer means that at least one server should be specified in the client options
 	ErrMinimumOneServer = errors.New("mqtt: at least one server needs to be specified")
 )
 
@@ -88,14 +92,14 @@ func NewClient(options ClientOptions) (*Client, error) {
 	return &Client{client: pahoClient, Options: options, router: router}, nil
 }
 
-// Connect tries to establish a conenction with the mqtt servers
+// Connect tries to establish a connection with the mqtt servers
 func (c *Client) Connect(ctx context.Context) error {
 	// try to connect to the client
 	token := c.client.Connect()
 	return tokenWithContext(ctx, token)
 }
 
-// Disconnect will immediately close the conenction with the mqtt servers
+// DisconnectImmediately will immediately close the connection with the mqtt servers
 func (c *Client) DisconnectImmediately() {
 	c.client.Disconnect(0)
 }

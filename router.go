@@ -16,6 +16,7 @@ func newRouter() *router {
 	return &router{routes: []Route{}, lock: sync.RWMutex{}}
 }
 
+// Route is a receipt for listening or handling certain topic
 type Route struct {
 	router  *router
 	id      string

@@ -29,10 +29,10 @@ func TestSubcribeSuccess(t *testing.T) {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
 
-	reciever := make(chan mqtt.Message)
+	receiver := make(chan mqtt.Message)
 	err = client.Subscribe(ctx(), testUUID+"/TestSubcribeSuccess/#", mqtt.ExactlyOnce)
 	client.Handle(testUUID+"/TestSubcribeSuccess/#", func(message mqtt.Message) {
-		reciever <- message
+		receiver <- message
 	})
 	if err != nil {
 		t.Fatalf("subscribe should not have failed: %v", err)
@@ -41,7 +41,7 @@ func TestSubcribeSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
-	message := <-reciever
+	message := <-receiver
 	if string(message.Payload()) != "[1, 2]" {
 		t.Fatalf("message payload should have been byte array '%v' but is %v", []byte("[1, 2]"), message.Payload())
 	}
@@ -88,7 +88,7 @@ func TestListenSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
-	reciever, _ := client.Listen(testUUID + "/TestListenSuccess")
+	receiver, _ := client.Listen(testUUID + "/TestListenSuccess")
 	err = client.Subscribe(ctx(), testUUID+"/TestListenSuccess", mqtt.ExactlyOnce)
 	if err != nil {
 		t.Fatalf("subscribe should not have failed: %v", err)
@@ -97,7 +97,7 @@ func TestListenSuccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
-	message := <-reciever
+	message := <-receiver
 	if message.PayloadString() != "hello" {
 		t.Fatalf("message payload should have been 'hello' but is %v", message)
 	}
@@ -139,9 +139,9 @@ func TestSubcribeSuccessAdvancedRouting(t *testing.T) {
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
-	reciever := make(chan mqtt.Message)
+	receiver := make(chan mqtt.Message)
 	client.Handle(testUUID+"/TestSubcribeSuccessAdvancedRouting/#", func(message mqtt.Message) {
-		reciever <- message
+		receiver <- message
 	})
 	err = client.Subscribe(ctx(), testUUID+"/TestSubcribeSuccessAdvancedRouting/#", mqtt.ExactlyOnce)
 	if err != nil {
@@ -151,7 +151,7 @@ func TestSubcribeSuccessAdvancedRouting(t *testing.T) {
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
-	message := <-reciever
+	message := <-receiver
 	if message.PayloadString() != "hello world" {
 		t.Fatalf("message payload should have been 'hello world' but is %v", message.PayloadString())
 	}
@@ -234,7 +234,7 @@ func TestRemoveRoute(t *testing.T) {
 	if err != nil {
 		t.Fatalf("connect should not have failed: %v", err)
 	}
-	reciever, route := client.Listen(testUUID + "/TestRemoveRoute")
+	receiver, route := client.Listen(testUUID + "/TestRemoveRoute")
 	err = client.Subscribe(ctx(), testUUID+"/TestRemoveRoute", mqtt.ExactlyOnce)
 	if err != nil {
 		t.Fatalf("subscribe should not have failed: %v", err)
@@ -243,10 +243,10 @@ func TestRemoveRoute(t *testing.T) {
 	if err != nil {
 		t.Fatalf("publish should not have failed: %v", err)
 	}
-	<-reciever
+	<-receiver
 	route.Stop()
 	select {
-	case <-reciever:
+	case <-receiver:
 		t.Fatalf("recieved a message which was not meant to happen: %v", err)
 	case <-time.After(500 * time.Millisecond):
 	}
