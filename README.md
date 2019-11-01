@@ -2,7 +2,7 @@
 
 [![GoDoc](https://godoc.org/github.com/lucacasonato/mqtt?status.svg)](http://godoc.org/github.com/lucacasonato/mqtt)
 [![CI](https://github.com/lucacasonato/mqtt/workflows/ci/badge.svg)](https://github.com/lucacasonato/mqtt/actions?workflow=ci)
-[![Code Coverage](https://img.shields.io/codecov/c/github/lucacasonato/mqtt?token=QoETPezQp9)](https://codecov.io/gh/lucacasonato/mqtt)
+[![Code Coverage](https://img.shields.io/codecov/c/gh/lucacasonato/mqtt?token=QoETPezQp9)](https://codecov.io/gh/lucacasonato/mqtt)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lucacasonato/mqtt)](https://goreportcard.com/report/github.com/lucacasonato/mqtt)
 
 An mqtt client for Go that improves usability over the [paho.mqtt.golang](https://github.com/eclipse/paho.mqtt.golang) library it wraps. Made for 🧑.
@@ -79,7 +79,7 @@ if err != nil {
 #### json
 
 ```go
-err := client.Publish(context.WithTimeout(1 * time.Second), "api/v0/main/client1", []string("hello", "world"), mqtt.AtLeastOnce)
+err := client.PublishJSON(context.WithTimeout(1 * time.Second), "api/v0/main/client1", []string("hello", "world"), mqtt.AtLeastOnce)
 if err != nil {
     panic(err)
 }
