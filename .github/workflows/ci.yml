@@ -6,6 +6,13 @@ jobs:
   test:
     name: ci
     runs-on: ubuntu-latest
+    services:
+      mqtt:
+        image: eclipse-mosquitto:latest
+        ports:
+          - 1883
+    env:
+      MQTT_BROKER: tcp://mqtt:1883
     steps:
       - name: Set up Go 1.13
         uses: actions/setup-go@v1
@@ -20,6 +27,13 @@ jobs:
   coverage:
     name: Coverage
     runs-on: ubuntu-latest
+    services:
+      mqtt:
+        image: eclipse-mosquitto:latest
+        ports:
+          - 1883
+    env:
+      MQTT_BROKER: tcp://mqtt:1883
     steps:
       - name: Set up Go 1.13
         uses: actions/setup-go@v1

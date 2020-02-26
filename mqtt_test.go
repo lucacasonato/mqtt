@@ -37,11 +37,11 @@ func TestNewClientNoServer(t *testing.T) {
 func TestNewClientBasicServer(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
@@ -52,11 +52,11 @@ func TestNewClientBasicServer(t *testing.T) {
 func TestNewClientNoClientID(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
-		t.Fatalf("err should be nil but is %v", err)
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
@@ -70,12 +70,12 @@ func TestNewClientNoClientID(t *testing.T) {
 func TestNewClientHasClientID(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 		ClientID: "client-id",
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
@@ -89,13 +89,13 @@ func TestNewClientHasClientID(t *testing.T) {
 func TestNewClientWithAuthentication(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 		Username: "user",
 		Password: "password",
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
@@ -106,18 +106,18 @@ func TestNewClientWithAuthentication(t *testing.T) {
 func TestConnectSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
 	err = client.Connect(ctx())
 	if err != nil {
-		t.Fatal("connect should not have failed")
+		t.Fatalf("connect should not have failed: %v", err)
 	}
 }
 
@@ -125,11 +125,11 @@ func TestConnectSuccess(t *testing.T) {
 func TestConnectContextTimeout(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
@@ -146,11 +146,11 @@ func TestConnectContextTimeout(t *testing.T) {
 func TestConnectContextCancel(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
@@ -175,7 +175,7 @@ func TestConnectFailed(t *testing.T) {
 		},
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
@@ -190,18 +190,18 @@ func TestConnectFailed(t *testing.T) {
 func TestDisconnectImmediately(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
-		t.Fatal("err should be nil")
+		t.Fatalf("creating client failed: %v", err)
 	}
 	if client == nil {
 		t.Fatal("client should not be nil")
 	}
 	err = client.Connect(ctx())
 	if err != nil {
-		t.Fatal("connect should not have failed")
+		t.Fatalf("connect should not have failed: %v", err)
 	}
 	client.DisconnectImmediately()
 }

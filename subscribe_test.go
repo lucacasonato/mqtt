@@ -17,7 +17,7 @@ func ctx() context.Context {
 func TestSubcribeSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -77,7 +77,7 @@ func TestSubcribeSuccess(t *testing.T) {
 func TestSubcribeMultipleSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -137,7 +137,7 @@ func TestSubcribeMultipleSuccess(t *testing.T) {
 func TestListenSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -167,7 +167,7 @@ func TestListenSuccess(t *testing.T) {
 func TestSubcribeFailure(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -188,7 +188,7 @@ func TestSubcribeFailure(t *testing.T) {
 func TestSubcribeSuccessAdvancedRouting(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -221,7 +221,7 @@ func TestSubcribeSuccessAdvancedRouting(t *testing.T) {
 func TestSubcribeNoRecieve(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -250,7 +250,7 @@ func TestSubcribeNoRecieve(t *testing.T) {
 func TestUnsubcribe(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -283,7 +283,7 @@ func TestUnsubcribe(t *testing.T) {
 func TestRemoveRoute(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -316,7 +316,7 @@ func TestRemoveRoute(t *testing.T) {
 func TestEmptyRoute(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
