@@ -80,6 +80,17 @@ func (c *Client) Subscribe(ctx context.Context, topic string, qos QOS) error {
 	return err
 }
 
+// SubscribeMultiple subscribes to multiple topics and errors if this fails.
+func (c *Client) SubscribeMultiple(ctx context.Context, subscriptions map[string]QOS) error {
+	subs := make(map[string]byte, len(subscriptions))
+	for topic, qos := range subscriptions {
+		subs[topic] = byte(qos)
+	}
+	token := c.client.SubscribeMultiple(subs, nil)
+	err := tokenWithContext(ctx, token)
+	return err
+}
+
 // Unsubscribe unsubscribes from a certain topic and errors if this fails.
 func (c *Client) Unsubscribe(ctx context.Context, topic string) error {
 	token := c.client.Unsubscribe(topic)

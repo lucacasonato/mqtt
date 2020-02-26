@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"os"
 	"testing"
 	"time"
 
@@ -12,12 +13,19 @@ import (
 )
 
 var testUUID = uuid.New().String()
+var broker = os.Getenv("MQTT_BROKER")
+
+func init() {
+	if broker == "" {
+		broker = "tcp://localhost:1883"
+	}
+}
 
 // TestPublishSuccess checks that a message publish succeeds
 func TestPublishSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -39,7 +47,7 @@ func TestPublishSuccess(t *testing.T) {
 func TestPublishContextTimeout(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	defer client.DisconnectImmediately()
@@ -62,7 +70,7 @@ func TestPublishContextTimeout(t *testing.T) {
 func TestPublishContextCancelled(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	defer client.DisconnectImmediately()
@@ -89,7 +97,7 @@ func TestPublishContextCancelled(t *testing.T) {
 func TestPublishFailed(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	defer client.DisconnectImmediately()
@@ -110,7 +118,7 @@ func TestPublishFailed(t *testing.T) {
 func TestPublishSuccessRetained(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -132,7 +140,7 @@ func TestPublishSuccessRetained(t *testing.T) {
 func TestPublisStringSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -154,7 +162,7 @@ func TestPublisStringSuccess(t *testing.T) {
 func TestPublisJSONSuccess(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {
@@ -176,7 +184,7 @@ func TestPublisJSONSuccess(t *testing.T) {
 func TestPublisJSONFailed(t *testing.T) {
 	client, err := mqtt.NewClient(mqtt.ClientOptions{
 		Servers: []string{
-			"tcp://test.mosquitto.org:1883",
+			broker,
 		},
 	})
 	if err != nil {

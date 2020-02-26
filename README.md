@@ -94,6 +94,15 @@ if err != nil {
 }
 ```
 
+```go
+err := client.SubscribeMultiple(context.WithTimeout(1 * time.Second), map[string]mqtt.QOS{
+    "api/v0/main/client1": mqtt.AtLeastOnce,
+})
+if err != nil {
+    panic(err)
+}
+```
+
 ### handling
 
 ```go
