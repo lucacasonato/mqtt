@@ -10,9 +10,9 @@ jobs:
       mqtt:
         image: eclipse-mosquitto:latest
         ports:
-          - 1883
+          - '1883:1883'
     env:
-      MQTT_BROKER: tcp://mqtt:1883
+      MQTT_BROKER: tcp://localhost:1883
     steps:
       - name: Set up Go 1.13
         uses: actions/setup-go@v1
@@ -31,9 +31,9 @@ jobs:
       mqtt:
         image: eclipse-mosquitto:latest
         ports:
-          - 1883
+          - '1883:1883'
     env:
-      MQTT_BROKER: tcp://mqtt:1883
+      MQTT_BROKER: tcp://localhost:1883
     steps:
       - name: Set up Go 1.13
         uses: actions/setup-go@v1
