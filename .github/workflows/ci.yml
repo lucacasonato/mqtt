@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test:
-    name: ci
+    name: test
     runs-on: ubuntu-latest
     services:
       mqtt:
@@ -25,7 +25,7 @@ jobs:
       - name: Run tests
         run: go test -race
   coverage:
-    name: Coverage
+    name: coverage
     runs-on: ubuntu-latest
     services:
       mqtt:
